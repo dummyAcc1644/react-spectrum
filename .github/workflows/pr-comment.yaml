@@ -4,12 +4,15 @@ on: issue_comment
 jobs:
   pr_commented:
     name: PR comment workflow
-    if: ${{ github.event.issue.pull_request }}
+    # TODO: change the github.repositiory to our actual repro
+    if: |
+      github.event.issue.pull_request &&
+      github.repository == 'LFDanLu/react-spectrum'
     runs-on: ubuntu-latest
     steps:
-      - name: What is the comment
+      - name: What is the pr info?
         run: |
-          echo "Comment on PR #${{ github.event.comment.body }}"
+          echo '${{ toJSON(github) }}'
       - name: Comment contains trigger
         if: contains(github.event.comment.body, 'test comment')
         run: |
