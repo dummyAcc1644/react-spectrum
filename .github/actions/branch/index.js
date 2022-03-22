@@ -1,10 +1,10 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 run();
 // Creates a branch off a fork PR
 async function run() {
-  const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
   const context = github.context;
   try {
     // Get info of the fork PR
