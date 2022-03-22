@@ -9,7 +9,7 @@ async function run() {
   try {
     // Get info of the fork PR
     const prNumber = context.issue.number;
-    const {data} = await octokit.rest.pulls.get({
+    const {data} = await octokit.pulls.get({
       ...context.repo,
       pull_number: prNumber
     });
@@ -20,7 +20,7 @@ async function run() {
     let res;
     // Look up if branch for fork PR exists in base repo
     try {
-      res = await octokit.rest.repos.getBranch({
+      res = await octokit.repos.getBranch({
         ...context.repo,
         branch
       });
@@ -30,7 +30,7 @@ async function run() {
       } else {
         // If branch doesn't exist for the forked PR, create one so we can get a
         // build for it and return
-        await octokit.rest.git.createRef({
+        await octokit.git.createRef({
           ...context.repo,
           ref,
           sha
@@ -41,7 +41,7 @@ async function run() {
 
     // If branch already exists update it to match fork PR state.
     if (res.status === 200) {
-      await octokit.rest.git.updateRef({
+      await octokit.git.updateRef({
         ...context.repo,
         sha,
         ref: `heads/${branch}`,
