@@ -4,16 +4,24 @@ on: issue_comment
 jobs:
   pr_commented:
     name: PR comment workflow
-    # TODO: change the github.repositiory to our actual repro
+    # TODOs: change the github.repositiory to our actual repo
+    # - change author association to memeber in actual repo (maybe change to something else entirely)
     if: |
       github.event.issue.pull_request &&
-      github.repository == 'LFDanLu/react-spectrum'
+      github.repository == 'LFDanLu/react-spectrum' &&
+      github.event.comment.author_association == 'OWNER'
     runs-on: ubuntu-latest
     steps:
-      - name: What is the pr info?
-        run: |
-          echo '${{ toJSON(github) }}'
+      - uses: actions/checkout@main
+      - name: Use Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: install
+        # TODO: change to yarn when running in RSP
+        run: yarn install
       - name: Comment contains trigger
         if: contains(github.event.comment.body, 'test comment')
-        run: |
-          echo "Comment on PR #${{ github.event.issue.number }}"
+        uses: ./.github/actions/branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
