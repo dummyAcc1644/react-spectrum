@@ -143,6 +143,9 @@ storiesOf('TextField', module)
   )
   .add('placeholder arabic',
     () => render({placeholder: 'أدخل رقماً'})
+  )
+  .add('test story',
+    () => render({placeholder: 'from other account'})
   );
 
 function render(props = {}) {
